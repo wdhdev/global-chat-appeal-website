@@ -25,18 +25,32 @@
             <h2 class="text-3xl font-bold mb-4">User Appeal</h2>
 
             <form id="user-appeal" class="mb-14" action="https://gc-api.wdh.gg/appeal/submit" method="POST">
-                <input type="text" name="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-1" placeholder="Discord ID" required>
+                <input type="text" name="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Discord ID" required>
                 <label for="id" class="block text-left text-gray-400 text-xs mt-3 mb-6">You can find your Discord ID <a class="text-blue-500 hover:text-blue-700 outline-transparent" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">here</a>.</label>
 
                 <label for="banreason" class="block text-left text-sm text-gray-400 mb-2">Why were you banned?</label>
 
-                <select name="banreason" id="banreason" class="block left-0 bg-zinc-700 p-1 mb-6 rounded-lg outline-transparent" required>
-                    <option value="" disabled selected>Select a Reason</option>
-                    <option value="spam">Spam</option>
-                    <option value="scam">Scam</option>
-                    <option value="nsfw">NSFW Content</option>
-                    <option value="other">Other</option>
-                </select>
+                <div class="block text-left mb-6 rounded-lg">
+                    <div class="mb-3">
+                        <input type="radio" id="spam" name="banreason" value="spam" class="hidden peer">
+                        <label for="spam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Spam</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="radio" id="scam" name="banreason" value="scam" class="hidden peer">
+                        <label for="scam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Scam</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="radio" id="nsfw" name="banreason" value="nsfw" class="hidden peer">
+                        <label for="nsfw" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">NSFW Content</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="other" name="banreason" value="other" class="hidden peer">
+                        <label for="other" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Other</label>
+                    </div>
+                </div>
 
                 <textarea type="text" name="unbanreason" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-6" placeholder="Why should you be unbanned?" required></textarea>
 
