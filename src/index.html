@@ -25,10 +25,10 @@
             <h2 class="text-3xl font-bold mb-4">User Appeal</h2>
 
             <form id="user-appeal" class="mb-14" action="https://gc-api.wdh.gg/appeal/submit" method="POST">
-                <input type="text" name="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Discord ID" required>
+                <input type="text" name="id" id="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Discord ID" required>
                 <label for="id" class="block text-left text-gray-400 text-xs mt-3 mb-6">You can find your Discord ID <a class="text-blue-500 hover:text-blue-700 outline-transparent" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">here</a>.</label>
 
-                <label for="banreason" class="block text-left text-sm text-gray-400 mb-2">Why were you banned?</label>
+                <label id="banreason" for="banreason" class="block text-left text-sm text-gray-400 mb-2">Why were you banned?</label>
 
                 <div class="block text-left mb-6 rounded-lg">
                     <div class="mb-3">
@@ -71,4 +71,27 @@
             <p>&copy; 2023 <span class="font-semibold">Global Chat</span> - All Rights Reserved.</p>
         </footer>
     </body>
+
+    <script>
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        })
+
+        const id = params.id;
+        const reason = params.reason;
+
+        if(id) {
+            document.getElementById("id").value = `${id}`;
+        }
+
+        if(reason) {
+            const elements = document.getElementsByTagName("input");
+
+            for(i = 0; i < elements.length; i++) {
+                if(elements[i].type == "radio" && elements[i].value == reason) {
+                    elements[i].checked = true;
+                }
+            }
+        }
+    </script>
 </html>

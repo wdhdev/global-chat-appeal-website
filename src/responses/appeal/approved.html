@@ -31,7 +31,7 @@
             get: (searchParams, prop) => searchParams.get(prop),
         })
 
-        let reason = params.reason;
+        const reason = params.reason;
 
         document.getElementById("reason").innerHTML = `<span class="font-semibold text-lg">Reason</span>: <code class="bg-gray-700 rounded-lg p-1 pl-2 pr-2">${reason}</code>`;
     </script>
