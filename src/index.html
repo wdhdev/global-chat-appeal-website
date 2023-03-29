@@ -11,6 +11,9 @@
         <!-- Favicon -->
         <link rel="shortcut icon" href="/assets/logo.png">
 
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
         <!-- Scripts -->
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
@@ -21,50 +24,105 @@
         </header>
 
         <main>
-            <!-- User Appeal -->
-            <h2 class="text-3xl font-bold mb-4">User Appeal</h2>
+            <div class="mb-14">
+                <!-- Appeal -->
+                <h2 class="text-3xl font-bold mb-6">Appeal</h2>
 
-            <form id="user-appeal" class="mb-14" action="https://gc-api.wdh.gg/appeal/submit" method="POST">
-                <input type="text" name="id" id="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Discord ID" required>
-                <label for="id" class="block text-left text-gray-400 text-xs mt-3 mb-6">You can find your Discord ID <a class="text-blue-500 hover:text-blue-700 outline-transparent" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">here</a>.</label>
+                <form id="appeal-form" onsubmit="sendAppeal()">
+                    <input type="text" name="id" id="id" minlength="17" maxlength="18" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Discord ID" required>
+                    <label for="id" class="block text-left text-gray-400 text-xs mt-3 mb-6">You can find your Discord ID <a class="text-blue-500 hover:text-blue-700 outline-transparent" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">here</a>.</label>
 
-                <label id="banreason" for="banreason" class="block text-left text-sm text-gray-400 mb-2">Why were you banned?</label>
+                    <label for="banreason" class="block text-left text-sm text-gray-400 mb-2">Why were you banned?</label>
 
-                <div class="block text-left mb-6 rounded-lg">
-                    <div class="mb-3">
-                        <input type="radio" id="spam" name="banreason" value="spam" class="hidden peer">
-                        <label for="spam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Spam</label>
+                    <div class="block text-left mb-6 rounded-lg">
+                        <div class="mb-3">
+                            <input type="radio" id="spam" name="banreason" value="spam" class="hidden peer">
+                            <label for="spam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Spam</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="radio" id="scam" name="banreason" value="scam" class="hidden peer">
+                            <label for="scam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Scam</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="radio" id="nsfw" name="banreason" value="nsfw" class="hidden peer">
+                            <label for="nsfw" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">NSFW Content</label>
+                        </div>
+
+                        <div>
+                            <input type="radio" id="other" name="banreason" value="other" class="hidden peer">
+                            <label for="other" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Other</label>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <input type="radio" id="scam" name="banreason" value="scam" class="hidden peer">
-                        <label for="scam" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Scam</label>
-                    </div>
+                    <textarea type="text" id="unbanreason" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-6" placeholder="Why should you be unbanned?" required></textarea>
 
-                    <div class="mb-3">
-                        <input type="radio" id="nsfw" name="banreason" value="nsfw" class="hidden peer">
-                        <label for="nsfw" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">NSFW Content</label>
-                    </div>
+                    <button type="submit" id="appeal-btn" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Send Appeal</button>
+                </form>
 
-                    <div>
-                        <input type="radio" id="other" name="banreason" value="other" class="hidden peer">
-                        <label for="other" class="cursor-pointer px-2 pt-1 pb-1 rounded-lg bg-gray-700 peer-checked:bg-gray-500">Other</label>
-                    </div>
+                <div id="not-banned" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-semibold">User is not banned</h1>
                 </div>
 
-                <textarea type="text" name="unbanreason" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-6" placeholder="Why should you be unbanned?" required></textarea>
+                <div id="appeal-exists" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-semibold">Appeal already exists</h1>
+                </div>
 
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Send Appeal</button>
-            </form>
+                <div id="appeal-created" class="hidden">
+                    <i class="fa-solid fa-check bg-green-600 pt-2.5 pb-2 pl-3 pr-3 rounded-full text-3xl mb-2"></i>
+                    <h1 class="mb-4 text-2xl font-bold">Your appeal has been created.</h1>
 
-            <!-- Check Appeal -->
-            <h2 class="text-3xl font-bold mb-4">Check Appeal</h2>
+                    <p id="appeal-id"></p>
+                </div>
 
-            <form id="check-appeal" class="mb-10" action="https://gc-api.wdh.gg/appeal/user/check" method="POST">
-                <input type="text" name="uuid" minlength="36" maxlength="36" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-6" placeholder="Appeal ID" required>
+                <div id="appeal-error" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-semibold">An error occurred</h1>
+                </div>
+            </div>
 
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Check Appeal</button>
-            </form>
+            <div class="mb-10">
+                <!-- Check Appeal -->
+                <h2 class="text-3xl font-bold mb-6">Check Appeal</h2>
+
+                <form id="check-appeal-form" class="mb-10" onsubmit="checkAppeal()">
+                    <input type="text" id="uuid" minlength="36" maxlength="36" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer mb-6" placeholder="Appeal UUID" required>
+
+                    <button type="submit" id="check-btn" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Check Appeal</button>
+                </form>
+
+                <div id="not-found" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-semibold">Appeal does not exist</h1>
+                </div>
+
+                <div id="not-reviewed" class="hidden">
+                    <i class="fa-solid fa-clock bg-yellow-600 pt-2.5 pb-2 pl-3 pr-3 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-semibold">Awaiting Response</h1>
+                </div>
+
+                <div id="denied" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="mb-4 text-2xl font-semibold">Your appeal has been denied.</h1>
+
+                    <p id="denied-reason" class="mb-8"></p>
+                </div>
+
+                <div id="approved" class="hidden">
+                    <i class="fa-solid fa-check bg-green-600 pt-2.5 pb-2 pl-3 pr-3 rounded-full text-3xl mb-2"></i>
+                    <h1 class="mb-4 text-2xl font-semibold">Your appeal has been approved.</h1>
+
+                    <p id="approved-reason" class="mb-8"></p>
+                </div>
+
+                <div id="check-error" class="hidden">
+                    <i class="fa-solid fa-x bg-red-600 pt-2.5 pb-2 pl-4 pr-4 rounded-full text-3xl mb-2"></i>
+                    <h1 class="text-2xl font-bold">An error occurred</h1>
+                </div>
+            </div>
         </main>
 
         <footer class="mt-8">
@@ -73,4 +131,6 @@
     </body>
 
     <script src="/js/autofill.js"></script>
+    <script src="/js/check-appeal.js"></script>
+    <script src="/js/send-appeal.js"></script>
 </html>
